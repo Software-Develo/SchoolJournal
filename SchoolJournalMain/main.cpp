@@ -16,6 +16,9 @@
 
 using namespace std;
 
+const string num = "0123456789";
+const string letters = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФЧЦШЩЫЭЮЯ";
+const string symbol = "?!@#$%^&*()_+-='|/.,><:;";
 const char *sign = " \t \r \n";
 
 class People{
@@ -28,12 +31,13 @@ public:
     vector<People> vect_dia;
 };
 
-
 int main(int argc, const char * argv[]) {
     setlocale(LC_ALL, "rus");
 
     string st_path;
     string stud_name;
+    string lexem;
+    string subject;
     char c_line[100];
     char *ptr;
     int stud_enter = 0;
@@ -54,21 +58,31 @@ int main(int argc, const char * argv[]) {
         st_fail.getline(c_line, 100);
         while(!st_fail.eof()){
             ptr = strtok(c_line, sign);
-
-            if(string(ptr) == "Ученик"){
+            lexem = string(ptr);
+            if(lexem == "Ученик"){
                 while((ptr = strtok(NULL, sign)) != NULL){
                     stud_enter++;
                     if(stud_enter == 1){
-                        stud_name = string(ptr);
+                        stud_name = lexem;
                     }else{
                         stud_name.push_back(' ');
-                        stud_name.append(ptr);
+                        stud_name.append(lexem);
                     }
                 }
                 stud_enter = 0;
-            }else if(string(ptr) == "Предмет"){
+            }else if(lexem == "Предмет"){
                 while((ptr = strtok(NULL, sign)) != NULL){
+                    if(lexem.find_first_of(letters) != string::npos){// Если в лексеме есть хоть одна буква
+                        subj_enter++;
+                        if(subj_enter == 1){
+                            subject = lexem;
+                        }else{
+                            subject.push_back(' ');
+                            subject.append(lexem);
+                        }
+                    }else if(lexem.find_first_of(letters) == string::npos && lexem.find_first_of(symbol) == string::npos && lexem.find_first_of(num) != string::npos){
 
+                    }
                 }
             }
         }
