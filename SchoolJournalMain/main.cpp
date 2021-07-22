@@ -69,7 +69,8 @@ int main(int argc, const char * argv[]) {
             }else if(string(ptr) == "Предмет"){
                 while((ptr = strtok(NULL, sign)) != NULL){
                     subj_enter++;
-
+                    cout << endl;
+                    cout << "Hello world!!!" << endl;
                 }
             }
 
