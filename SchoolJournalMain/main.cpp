@@ -68,12 +68,9 @@ int main(int argc, const char * argv[]) {
                 stud_enter = 0;
             }else if(string(ptr) == "Предмет"){
                 while((ptr = strtok(NULL, sign)) != NULL){
-                    subj_enter++;
-                    cout << endl;
-                    cout << "Hello world!!!" << endl;
+
                 }
             }
-
         }
 
     }else cout << "Файл " << st_path << " не открылся!!!!!";
