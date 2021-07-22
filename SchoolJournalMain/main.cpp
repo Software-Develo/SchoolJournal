@@ -81,15 +81,13 @@ int main(int argc, const char * argv[]) {
                             subject.append(lexem);
                         }
                     }else if(lexem.find_first_of(letters) == string::npos && lexem.find_first_of(symbol) == string::npos && lexem.find_first_of(num) != string::npos){
-
+                        cout << "Hello world" << endl;
+                        cout << endl;
                     }
                 }
             }
         }
-
     }else cout << "Файл " << st_path << " не открылся!!!!!";
-
-
 
     st_fail.close();
     return 0;
