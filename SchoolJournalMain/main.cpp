@@ -34,18 +34,20 @@ public:
 
     void print(){// Выводим вектор на экран
         for(int a = 0; a < vect_dia.size(); a++){
-            cout << endl << "Ученик" << "\t" << vect_dia[a].fullname << endl;
+            cout << endl << "Ученик" << "\t" << vect_dia[a].fullname << ":" << endl;
             while(i < vect_dia[a].vect_peo.size()) {
-                cout << "Предмет" << "\t";
+                cout << "\t" << "Предмет" << "\t";
                 while (j < vect_dia[a].vect_peo[i].size()) {
-                    cout << vect_dia[a].vect_peo[i][j] << endl;
+                    cout << vect_dia[a].vect_peo[i][j] << " ";
                     j++;
                 }
+                cout << endl;
                 j = 0;
                 i++;
             }
             i = 0;
         }
+        cout << endl;
     }
 };
 
@@ -60,7 +62,7 @@ int main(int argc, const char * argv[]) {
     int stud_enter = 0;
     int subj_enter = 0;
     bool ItIsEnd = false;
-    bool enter = false;
+    bool ItIsWord = false;
 
     cout << "Дневник" << endl << "Введите путь до файла" << endl << "Путь: ";
     cin >> st_path;
@@ -72,7 +74,7 @@ int main(int argc, const char * argv[]) {
     ifstream st_fail;
     st_fail.open(st_path);
     if(st_fail.is_open()){
-        cout << "Файл " << st_path << " открылся";
+        cout << "Файл " << st_path << " открылся" << endl;
         vector<string> vect;
         st_fail.getline(c_line, 100);
         while(!st_fail.eof()){
@@ -104,11 +106,11 @@ int main(int argc, const char * argv[]) {
                             subject.push_back(' ');
                             subject.append(string(ptr));
                         }
-                        enter = true;
+                        ItIsWord = true;
                     }
                     // Если нет букв, символов, но есть цифры
                     else if(string(ptr).find_first_of(letters) == string::npos && string(ptr).find_first_of(symbol) == string::npos && string(ptr).find_first_of(num) != string::npos){
-                        if(enter) {subj_enter = 0; enter = false;}
+                        if(ItIsWord) {subj_enter = 0; ItIsWord = false;}
                         subj_enter++;
                         if(subj_enter == 1){
                             vect.push_back(subject);
@@ -118,18 +120,18 @@ int main(int argc, const char * argv[]) {
                         }
                     }
                 }
+                if(ptr == NULL && ItIsWord) vect.push_back(subject);
                 people.vect_peo.push_back(vect);
                 vect.clear();
                 ItIsEnd = true;
             }
+
             st_fail.getline(c_line, 100);
         }
         diary.vect_dia.push_back(people);
         people.vect_peo.clear();
         diary.print();
     }else cout << "Файл " << st_path << " не открылся!!!!!" << endl;
-
-    cout << "Конец!!!" << endl;
     st_fail.close();
     return 0;
 
