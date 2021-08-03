@@ -4,7 +4,7 @@
 //
 //  Created by Marat Khisamutdinov on 7/22/21.
 //
-// /Users/maratkhisamutdinov/Desktop/spisok.txt
+//  /Users/maratkhisamutdinov/Desktop/spisok.txt
 
 #include <iostream>
 #include <string.h>
@@ -23,8 +23,6 @@ const string letters = "абвгдеёжзийклмнопрстуфхцчшщъ
 const string symbol = "?!@#$%^&*()_+-='|/.,><:;";
 const char *sign = " \t \r \n";
 
-bool ItIsEnd = false;
-
 string fullname;
 string name;
 int a = 0;
@@ -37,43 +35,70 @@ public:
     vector<vector<string>> vect_peo;
 };
 class Diary{
-    string stud_name;
-    string subj_name;
-    string input;
+    vector<string> input;
+    string name;
+    string subj;
     string mark;
     int number = 0;
     bool know_fullname = false;
+    bool have = false;
+    bool correct = false;
 public:
     vector<People> vect_dia;
 
     bool new_fullname(){// Новое имя
-        cout << "Фамилия: ";
-        cin >> fullname;
-        cout << "Имя: ";
-        cin >> name;
-        fullname.push_back(' ');
-        fullname.append(name);
+        cout << "Фамилия и имя ученика: ";
+        cin.get();
+        getline(cin, fullname);
         for(i = 0; i < vect_dia.size(); i++){
-            if(fullname == vect_dia[i].peo_name) return false;
+            if(fullname == vect_dia[i].peo_name) return false;// Если это ФИ уже существует, то это не новый ученик
         }
         return true;// Иначе true
     }
-
     int adding_subject(){// Добавить предмет
-        if(know_fullname){
+        if(know_fullname){// Если знаем ФИ
             cout << "Название предмета: ";
-            std::getline(cin, input);
-            cout << endl << input << endl;
+            cin.get();
+            getline(cin, subj);
             for(a = 0; a < vect_dia.size(); a++){
-                if(vect_dia[a].peo_name == fullname){
+                if(vect_dia[a].peo_name == fullname){// Если нашли ученика
                     for(i = 0; i < vect_dia[a].vect_peo.size(); i++){
-                        if(vect_dia[a].vect_peo[i][0] == subj_name){
+                        if(vect_dia[a].vect_peo[i][0] == subj){// Если нашли этот предмет
                             cout << "Оценка: ";
                             cin >> mark;
-                            vect_dia[a].vect_peo[i].emplace_back(mark);
+                            vect_dia[a].vect_peo[i].emplace_back(mark);// Записываем оценку к этому предмету
+                            have = true;
+                            break;
                         }
                     }
+                    if(have) break;
                 }
+            }
+            if(!have){// Если такого предмета нет
+                correct = false;
+                input.clear();// Очищаем вектор
+                for(a = 0; a < vect_dia.size(); a++) {
+                    if(vect_dia[a].peo_name == fullname) {// Если нашли ученика
+                        input.emplace_back(subj);// В вектор записываем предмет
+                        while(!correct) {
+                            cout << "Добавить оценку - 1, ничего не делать - 2" << space;
+                            cin >> number;
+                            switch (number) {
+                                case 1:
+                                    correct = true;
+                                    cout << "Оценка: ";
+                                    cin >> mark;
+                                    input.emplace_back(mark);
+                                    break;
+                                case 2:
+                                    correct;
+                                    return 0;
+                            }
+                        }
+                        vect_dia[a].vect_peo.emplace_back(input);// Вектор записываем в другой вектор
+                    }
+                }
+
             }
         }
         else{
@@ -81,38 +106,32 @@ public:
         }
         return 0;
     }
-
     int adding_student(){// Добавить ученика
-
         if(new_fullname()){// Если это новый ученик
 
         }
         else{
-            cout << "Такой ученик уже существует. Чтобы добавить предмет к нему нажмите 1, чтобы добавить оценку нажмите 2, если ничего, то 3" << endl;
+            cout << "Такой ученик уже существует. Чтобы добавить предмет к нему нажмите 1, чтобы добавить оценку нажмите 2, если ничего, то 3" << space;
             cin >> number;
-            cout << endl;
             switch(number){
                 case 1:
-                    know_fullname = true;
-                    adding_subject();
+                    know_fullname = true;// Знаем его ФИ
+                    adding_subject();// Добавление предмета
                 case 3:
                     return 0;
             }
         }
         return 0;
     }
-
     void editing_diary(){
         cout << "Нажимайте на цифры на клавиатуре взависимости от того, что нужно выбрать" << endl;
         cout << "Добавить ученика - 1" << space;
         cin >> number;
-        cout << endl;
         switch(number){
             case 1:
                 adding_student();// Функция для добавления учеников
         }
     }
-
     void print(){// Выводим вектор на экран
         for(a = 0; a < vect_dia.size(); a++){
             i = 0;
@@ -137,13 +156,11 @@ int main(int argc, const char * argv[]) {
     setlocale(LC_ALL, "rus");
 
     string st_path;
-
     string subject;
     char c_line[100];
     char *ptr;
     int stud_enter = 0;
     int subj_enter = 0;
-    int number = 0;
     bool ItIsEnd = false;
     bool ItIsWord = false;
 
@@ -214,7 +231,9 @@ int main(int argc, const char * argv[]) {
         diary.vect_dia.push_back(people);
         people.vect_peo.clear();
 
+        diary.print();
         diary.editing_diary();
+        diary.print();
 
     }else cout << "Файл " << st_path << " не открылся!!!!!" << endl;
 
